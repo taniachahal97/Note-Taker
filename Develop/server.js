@@ -5,7 +5,7 @@ const fs = require('fs');
 const uuid = require('./helpers/uuid');
 
 
-const jsonData = require('./db/db.json');
+//const jsonData = require('./db/db.json');
 
 const PORT = 3001;
 const app = express();
@@ -16,66 +16,45 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static('public'));
 
 
-
-
-
 // GET request for notes
 app.get('/api/notes', (req, res) => {
-    return res.status(200).json(jsonData);
-  });
+  res.sendFile(path.join(__dirname, './db/db.json'));
+});
 
-  app.post('/api/notes', (req, res) => {
-    // Log that a POST request was received
-    console.info(`${req.method} request received to add a review`);
+
+
+app.post('/api/notes', (req, res) => {
+  let notes = [];
   
-    // Destructuring assignment for the items in req.body
+  fs.readFile('./db/db.json','utf8',(err, data) => {
+    if (err) throw err;
+    notes = JSON.parse(data);
+
     const { title, text } = req.body;
   
     // If all the required properties are present
-    if (title && text) {
+  
       // Variable for the object we will save
-      const newNote = {
+    const newNote = {
         id: uuid(),
         title,
         text,
-      };
+    };
 
-      // Obtain existing reviews
-    fs.readFile('./db/db.json', 'utf8', (err, data) => {
-        if (err) {
-          console.error(err);
-        } else {
-          // Convert string into JSON object
-          const parsedReviews = JSON.parse(data);
-  
-          // Add a new note
-          parsedReviews.push(newNote);
-  
-          // Write updated reviews back to the file
-          fs.writeFile(
-            './db/db.json',
-            JSON.stringify(parsedReviews, null, 4),
-            (writeErr) =>
-              writeErr
-                ? console.error(writeErr)
-                : console.info('Successfully updated the notes!')
-          );
-        }
+  // pushing created note to be written in the db.json file
+    notes.push(newNote);
+
+    fs.writeFile('./db/db.json', JSON.stringify(notes), err => {
+      if (err) throw err;
+        res.send(notes);
       });
-  
-      const response = {
-        status: 'success',
-        body: newNote,
-      };
-  
-      console.log(response);
-      return res.status(200).json(response);
-    } else {
-      return res.status(500).json('Error in posting review');
-    }
+
   });
 
+  
 
+});
+  
   app.delete('/api/notes/:id', (req, res) => {
 
     // read data from the file 
@@ -97,8 +76,9 @@ app.get('/api/notes', (req, res) => {
 
         fs.writeFile('./db/db.json', JSON.stringify(notes), err => {
           if (err) throw err;
-            res.send('Review deleted');
+            res.send(notes);
           });
+
       });
 
       
