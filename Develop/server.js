@@ -15,20 +15,13 @@ app.use(express.urlencoded({extended:true}));
 
 app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-    
-    res.sendFile(path.json(__dirname, '/public/index.html')
-    )});
 
-app.get('/notes', (req, res) => {
-    
-    res.sendFile(__dirname + '/public/notes.html');
-    
-  });
+
+
 
 // GET request for notes
 app.get('/api/notes', (req, res) => {
-    res.status(200).json(jsonData);
+    return res.status(200).json(jsonData);
   });
 
   app.post('/api/notes', (req, res) => {
@@ -76,11 +69,52 @@ app.get('/api/notes', (req, res) => {
       };
   
       console.log(response);
-      res.status(201).json(response);
+      return res.status(200).json(response);
     } else {
-      res.status(500).json('Error in posting review');
+      return res.status(500).json('Error in posting review');
     }
   });
+
+
+  app.delete('/api/notes/:id', (req, res) => {
+
+    // read data from the file 
+
+    let notes = [];
+    const noteId = req.params.id
+
+    fs.readFile('./db/db.json','utf8',(err, data) => {
+        if (err) throw err;
+        notes = JSON.parse(data);
+
+        const noteIndex = notes.findIndex(note => note.id === noteId);
+  
+        if (noteIndex === -1) {
+          return res.status(404).send('Review not found');
+        }
+
+        notes.splice(noteIndex, 1);
+
+        fs.writeFile('./db/db.json', JSON.stringify(notes), err => {
+          if (err) throw err;
+            res.send('Review deleted');
+          });
+      });
+
+      
+
+  });
+
+app.get('/notes', (req, res) => {
+    
+  res.sendFile(__dirname + '/public/notes.html');
+  
+});
+
+app.get('/', (req, res) => {
+    
+    res.sendFile(path.json(__dirname, '/public/index.html')
+    )});
 
 app.listen(PORT, () => 
     console.log(`App listening at http://localhost:${PORT}`));
