@@ -3,7 +3,7 @@ let noteText;
 let saveNoteBtn;
 let newNoteBtn;
 let noteList;
-let shouldDisplay = false;
+
 
 
 
@@ -27,14 +27,14 @@ const hide = (elem) => {
 
 // displays save button if note title is added by user 
 
-noteTitle.addEventListener("input", function() {  //added to render save btn
-  handleRenderSaveBtn();
-});
+//noteTitle.addEventListener("input", function() {  //added to render save btn
+  //handleRenderSaveBtn();
+//});
 
-noteText.addEventListener("input", function() {  //added to render save btn
-  handleRenderSaveBtn();
+//noteText.addEventListener("input", function() {  //added to render save btn
+  //handleRenderSaveBtn();
  
-});
+//});
 
 
 // activeNote is used to keep track of the note in the textarea
@@ -99,7 +99,7 @@ const handleNoteSave = () => {
 
 // adding event listener on save button to make cal to handleNoteSave 
 
-saveNoteBtn.addEventListener('click', handleNoteSave);
+//saveNoteBtn.addEventListener('click', handleNoteSave);
 //saveNoteBtn.addEventListener('click', handleNoteView);
 
 // Delete the clicked note
@@ -142,13 +142,13 @@ const handleRenderSaveBtn = () => {
   
 };
 
-const handleSaveBtn = () => {
-  if (!noteText.value.trim()) {  //been used
-    hide(saveNoteBtn);
-  } else {
-    show(saveNoteBtn);
-  }
-};
+//const handleSaveBtn = () => {
+  //if (!noteText.value.trim()) {  //been used
+    //hide(saveNoteBtn);
+  //} else {
+    //show(saveNoteBtn);
+  //}
+//};
 
 // Render the list of note titles
 const renderNoteList = async (notes) => {
@@ -215,18 +215,3 @@ if (window.location.pathname === '/notes') {
 }
 
 getAndRenderNotes();
-
-const startButton = document.getElementById('notes-btn');
-
-const buttonHandler = () => {
-  fetch('/notes')
-    .then((response) => {
-      window.location.href = "/notes";
-    })
-    .catch((error) => {
-      console.error('Error fetching page:', error);
-    });
-  }
-
-
-startButton.addEventListener('click', buttonHandler)
