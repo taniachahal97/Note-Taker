@@ -18,3 +18,4 @@ The following screenshot demonstrates the application functionality:
 ![note-taker-2](public/assets/images/image-2.png)
 
 # Link to Deployed Heroku Code
+https://pure-savannah-11011.herokuapp.com/
