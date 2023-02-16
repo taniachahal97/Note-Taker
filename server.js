@@ -7,7 +7,7 @@ const uuid = require('./helpers/uuid');
 
 //const jsonData = require('./db/db.json');
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 const app = express();
 
 app.use(express.json());
