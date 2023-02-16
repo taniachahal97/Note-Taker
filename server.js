@@ -22,7 +22,7 @@ app.get('/api/notes', (req, res) => {
 });
 
 
-
+//POST request to read existing notes and write new notes
 app.post('/api/notes', (req, res) => {
   let notes = [];
   
@@ -32,9 +32,9 @@ app.post('/api/notes', (req, res) => {
 
     const { title, text } = req.body;
   
-    // If all the required properties are present
+    
   
-      // Variable for the object we will save
+    // Variable for the object we will save
     const newNote = {
         id: uuid(),
         title,
@@ -54,6 +54,8 @@ app.post('/api/notes', (req, res) => {
   
 
 });
+
+// DELETE request to delete a note
   
   app.delete('/api/notes/:id', (req, res) => {
 
@@ -85,12 +87,15 @@ app.post('/api/notes', (req, res) => {
 
   });
 
+
+  //GET request to notes.html page
 app.get('/notes', (req, res) => {
     
   res.sendFile(__dirname + '/public/notes.html');
   
 });
 
+// GET request to index.html page
 app.get('/', (req, res) => {
     
     res.sendFile(path.json(__dirname, '/public/index.html')
